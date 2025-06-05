@@ -17,7 +17,18 @@ app.post('/upload', upload.single('file'), (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  socket.on('message', (msg) => io.emit('message', msg));
+  socket.on('joinRoom', (room, username) => {
+    socket.join(room);
+    socket.room = room;
+    socket.username = username;
+    socket.to(room).emit('message', `${username} joined the room`);
+  });
+
+  socket.on('message', (msg) => {
+    if (socket.room && socket.username) {
+      io.to(socket.room).emit('message', `${socket.username}: ${msg}`);
+    }
+  });
 });
 
 const PORT = process.env.PORT || 10000;

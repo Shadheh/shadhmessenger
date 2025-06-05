@@ -1,2 +1,2 @@
-# shadh Messenger
-A real-time chat and media sharing app.
+# shadh Messenger (Upgraded)
+Includes themes, usernames, rooms, notifications.

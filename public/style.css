@@ -1,5 +1,7 @@
-body { font-family: sans-serif; background: #f0f0f0; }
+body { font-family: sans-serif; background: var(--bg); color: var(--text); transition: 0.3s; }
+:root { --bg: #fff; --text: #000; }
+body.dark { --bg: #121212; --text: #f0f0f0; }
+.theme-toggle { position: absolute; top: 10px; right: 10px; cursor: pointer; }
 #chat-container { width: 100%; max-width: 600px; margin: auto; }
-#messages { height: 300px; overflow-y: scroll; background: #fff; padding: 10px; }
-input[type=text], input[type=file] { width: 80%; padding: 10px; }
-button { padding: 10px; }
+#messages { height: 300px; overflow-y: scroll; background: #eee; padding: 10px; margin-bottom: 10px; }
+input, button { padding: 10px; margin: 5px 0; width: calc(100% - 22px); }
