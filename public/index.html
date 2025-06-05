@@ -1,64 +1,44 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Shadh Messenger</title>
+  <title>Chat</title>
   <style>
-    body {
-      margin: 0;
-      background: linear-gradient(to bottom right, #1f1c2c, #928dab);
-      font-family: 'Segoe UI', sans-serif;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
-    header {
-      padding: 1rem;
-      background-color: rgba(0, 0, 0, 0.4);
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-    #chat {
-      flex: 1;
-      padding: 1rem;
-      overflow-y: auto;
-      background: rgba(255,255,255,0.05);
-      border-top: 1px solid rgba(255,255,255,0.1);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    #input-bar {
-      display: flex;
-      padding: 1rem;
-      background: rgba(0,0,0,0.3);
-    }
-    #input-bar input {
-      flex: 1;
-      padding: 0.5rem;
-      border: none;
-      border-radius: 12px;
-      margin-right: 0.5rem;
-    }
-    #input-bar button {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 12px;
-      background-color: #4facfe;
-      color: white;
-      font-weight: bold;
-    }
+    body { font-family: sans-serif; background: #121212; color: white; margin: 0; padding: 0; }
+    #messages { height: 70vh; overflow-y: scroll; padding: 1rem; border-bottom: 1px solid #333; }
+    input, button { padding: 0.5rem; margin: 0.5rem; }
   </style>
 </head>
 <body>
-  <header>Shadh Messenger ✨</header>
-  <div id="chat">
-    <p><em>Welcome! This is your beautiful premium chat UI 💬</em></p>
-  </div>
-  <div id="input-bar">
-    <input type="text" placeholder="Type a message..." />
-    <button>Send</button>
-  </div>
+  <h2>Shadh Messenger Chat</h2>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <button type="submit">Upload Media</button>
+  </form>
+  <div id="messages"></div>
+  <input id="msg" autocomplete="off" placeholder="Type a message..." />
+  <button onclick="send()">Send</button>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const messages = document.getElementById('messages');
+    function send() {
+      const msg = document.getElementById('msg').value;
+      socket.emit('message', msg);
+      document.getElementById('msg').value = '';
+    }
+    socket.on('message', msg => {
+      const el = document.createElement('div');
+      el.textContent = msg;
+      messages.appendChild(el);
+    });
+    document.getElementById('uploadForm').onsubmit = async e => {
+      e.preventDefault();
+      const form = new FormData(e.target);
+      const res = await fetch('/upload', { method: 'POST', body: form });
+      const data = await res.json();
+      socket.emit('message', '📎 ' + data.file);
+    };
+  </script>
 </body>
 </html>
