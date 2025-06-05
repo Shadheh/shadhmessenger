@@ -4,41 +4,37 @@ const multer = require('multer');
 const http = require('http');
 const path = require('path');
 const { Server } = require('socket.io');
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
+
+cloudinary.config({
+  cloud_name: 'demo',  // <-- replace with yours
+  api_key: '123456',   // <-- replace with yours
+  api_secret: 'abcxyz' // <-- replace with yours
+});
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
 app.use(express.static('public'));
-app.use(express.urlencoded({ extended: true }));
 
-// Upload setup
-const mediaStorage = multer.diskStorage({
-  destination: './public/uploads/',
-  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
-});
-const profileStorage = multer.diskStorage({
-  destination: './public/profile/',
-  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
-});
-const upload = multer({ storage: mediaStorage });
-const profileUpload = multer({ storage: profileStorage });
+const upload = multer({ dest: 'uploads/' });
 
-// Upload routes
-app.post('/upload', upload.single('file'), (req, res) => {
-  res.send({ file: '/uploads/' + req.file.filename });
-});
-app.post('/profile', profileUpload.single('profile'), (req, res) => {
-  res.send({ file: '/profile/' + req.file.filename });
+app.post('/upload', upload.single('file'), async (req, res) => {
+  const result = await cloudinary.uploader.upload(req.file.path);
+  fs.unlinkSync(req.file.path);
+  res.send({ url: result.secure_url });
 });
 
-// Simple homepage
 app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
 
-// Group chat
 io.on('connection', socket => {
-  socket.on('message', msg => io.emit('message', msg));
+  socket.on('join', room => socket.join(room));
+  socket.on('message', ({ room, msg }) => {
+    io.to(room).emit('message', { msg });
+  });
 });
 
 const port = process.env.PORT || 10000;
-server.listen(port, () => console.log('🚀 Server ready on port ' + port));
+server.listen(port, () => console.log('🚀 Phase 12 running on ' + port));

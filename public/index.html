@@ -2,57 +2,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Shadh Messenger Phase 11</title>
+  <title>Shadh Messenger Phase 12</title>
   <style>
-    body.light { background: #ffffff; color: black; }
-    body.dark { background: #121212; color: white; }
-    #messages { height: 60vh; overflow-y: scroll; border: 1px solid #333; margin-bottom: 1rem; }
+    body { background: linear-gradient(135deg, #101010, #1a1a1a); color: white; font-family: sans-serif; }
+    #messages { height: 60vh; overflow-y: scroll; border: 1px solid #444; background: #222; margin: 1rem 0; padding: 0.5rem; }
+    input, button { padding: 10px; margin: 5px; border: none; border-radius: 8px; }
+    .input-bar { display: flex; gap: 5px; }
   </style>
 </head>
-<body class="dark">
-  <button onclick="toggleTheme()">🌗 Toggle Theme</button>
-  <form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" name="file" />
-    <button type="submit">📎 Upload</button>
-  </form>
-  <form id="profileForm" enctype="multipart/form-data">
-    <input type="file" name="profile" />
-    <button type="submit">👤 Profile Pic</button>
-  </form>
+<body>
+  <h1>Shadh Messenger 🔐</h1>
+  <input id="room" placeholder="Enter Room Code" />
+  <button onclick="joinRoom()">Join</button>
+  <div id="qr"></div>
   <div id="messages"></div>
-  <input id="msg" autocomplete="off" placeholder="Type message..." />
-  <button onclick="send()">Send</button>
-  <script src="/socket.io/socket.io.js"></script>
+  <div class="input-bar">
+    <input id="msg" placeholder="Message..." />
+    <button onclick="send()">Send</button>
+    <input type="file" id="mediaInput" />
+    <button onclick="uploadMedia()">📎</button>
+  </div>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <script>
     const socket = io();
-    const messages = document.getElementById('messages');
+    let currentRoom = '';
+
+    function joinRoom() {
+      const room = document.getElementById('room').value;
+      currentRoom = room;
+      socket.emit('join', room);
+      QRCode.toDataURL(window.location.href + '?room=' + room, (err, url) => {
+        document.getElementById('qr').innerHTML = '<img src="' + url + '" width="100"/>';
+      });
+    }
+
     function send() {
       const msg = document.getElementById('msg').value;
-      socket.emit('message', msg);
+      socket.emit('message', { room: currentRoom, msg });
       document.getElementById('msg').value = '';
     }
-    socket.on('message', msg => {
+
+    socket.on('message', ({ msg }) => {
       const el = document.createElement('div');
       el.textContent = msg;
-      messages.appendChild(el);
+      document.getElementById('messages').appendChild(el);
     });
-    document.getElementById('uploadForm').onsubmit = async e => {
-      e.preventDefault();
-      const form = new FormData(e.target);
+
+    async function uploadMedia() {
+      const input = document.getElementById('mediaInput');
+      const form = new FormData();
+      form.append('file', input.files[0]);
       const res = await fetch('/upload', { method: 'POST', body: form });
       const data = await res.json();
-      socket.emit('message', '📎 ' + data.file);
-    };
-    document.getElementById('profileForm').onsubmit = async e => {
-      e.preventDefault();
-      const form = new FormData(e.target);
-      const res = await fetch('/profile', { method: 'POST', body: form });
-      const data = await res.json();
-      alert("👤 Profile uploaded: " + data.file);
-    };
-    function toggleTheme() {
-      const body = document.body;
-      body.className = body.className === 'dark' ? 'light' : 'dark';
+      socket.emit('message', { room: currentRoom, msg: '📎 ' + data.url });
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('room')) {
+      document.getElementById('room').value = urlParams.get('room');
+      joinRoom();
     }
   </script>
 </body>
