@@ -1,1 +1,1 @@
-// Chat client-side logic placeholder
+// JS for sending messages, QR, themes, media

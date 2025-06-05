@@ -1,1 +1,12 @@
-/* Apple-style UI and WhatsApp-like layout */
+
+body {
+  font-family: 'San Francisco', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen;
+  margin: 0; padding: 0;
+  background: var(--bg); color: var(--text);
+}
+.container {
+  display: flex; flex-direction: column; height: 100vh;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 16px;
+}
+.message-box { flex: 1; overflow-y: auto; padding: 12px; }
+.input-area { display: flex; padding: 12px; border-top: 1px solid #ccc; }

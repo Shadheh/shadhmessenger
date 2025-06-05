@@ -1,1 +1,1 @@
-// Express app entry
+// Express server code placeholder

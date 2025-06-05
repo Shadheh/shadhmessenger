@@ -1,3 +1,3 @@
-# Shadh Messenger Phase 13
+# Shadh Messenger Phase 14
 
-Includes chat, media, QR, login, push notifications, themes.
+Premium mobile-first UI with chat, QR, media, login, push notifications.
