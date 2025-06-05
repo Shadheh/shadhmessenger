@@ -1,40 +1,27 @@
 
-const express = require('express');
-const multer = require('multer');
-const http = require('http');
-const path = require('path');
-const { Server } = require('socket.io');
-const cloudinary = require('cloudinary').v2;
-const fs = require('fs');
-
-cloudinary.config({
-  cloud_name: 'demo',  // <-- replace with yours
-  api_key: '123456',   // <-- replace with yours
-  api_secret: 'abcxyz' // <-- replace with yours
-});
-
+const express = require("express");
+const multer = require("multer");
+const path = require("path");
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
+const PORT = process.env.PORT || 10000;
 
-app.use(express.static('public'));
+app.use(express.static("public"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
-const upload = multer({ dest: 'uploads/' });
+// File upload setup
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, "uploads/"),
+  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
+});
+const upload = multer({ storage });
 
-app.post('/upload', upload.single('file'), async (req, res) => {
-  const result = await cloudinary.uploader.upload(req.file.path);
-  fs.unlinkSync(req.file.path);
-  res.send({ url: result.secure_url });
+app.get("/", (req, res) => res.render("index"));
+
+app.post("/upload", upload.single("media"), (req, res) => {
+  res.json({ success: true, filename: req.file.filename });
 });
 
-app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
-
-io.on('connection', socket => {
-  socket.on('join', room => socket.join(room));
-  socket.on('message', ({ room, msg }) => {
-    io.to(room).emit('message', { msg });
-  });
-});
-
-const port = process.env.PORT || 10000;
-server.listen(port, () => console.log('🚀 Phase 12 running on ' + port));
+app.listen(PORT, () => console.log("Running on http://localhost:" + PORT));
