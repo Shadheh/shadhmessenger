@@ -1,1 +1,17 @@
-<!DOCTYPE html><html><head><title>Shadh Messenger</title></head><body><h1>Welcome to Shadh Messenger</h1></body></html>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shadh Messenger</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <h1>Welcome to Shadh Messenger</h1>
+    <input id="msg" placeholder="Type a message" />
+    <button onclick="send()">Send</button>
+    <div id="chat"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
