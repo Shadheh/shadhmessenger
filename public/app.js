@@ -8,6 +8,7 @@ function joinRoom() {
   socket.emit('joinRoom', room, username);
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('chat-container').style.display = 'block';
+  generateQR(room);
   notify('Joined ' + room);
 }
 
@@ -28,11 +29,7 @@ document.getElementById('fileInput').addEventListener('change', async (e) => {
   const file = e.target.files[0];
   const formData = new FormData();
   formData.append('file', file);
-
-  const res = await fetch('/upload', {
-    method: 'POST',
-    body: formData
-  });
+  const res = await fetch('/upload', { method: 'POST', body: formData });
   const data = await res.json();
   socket.emit('message', `${username} shared file: ${data.file}`);
 });
@@ -44,4 +41,9 @@ function toggleTheme() {
 
 if (localStorage.getItem('theme') === 'dark') {
   document.body.classList.add('dark');
+}
+
+function generateQR(roomName) {
+  const canvas = document.getElementById('qrcode');
+  QRCode.toCanvas(canvas, window.location.origin + "?room=" + encodeURIComponent(roomName));
 }

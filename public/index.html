@@ -6,18 +6,23 @@
 </head>
 <body>
   <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
-  <div id="login-screen">
-    <input id="username" placeholder="Enter username">
-    <input id="room" placeholder="Enter room name">
-    <button onclick="joinRoom()">Join Chat</button>
+  <div id="login-screen" class="card">
+    <h2>Join Chat Room</h2>
+    <input id="username" placeholder="Username" />
+    <input id="room" placeholder="Room Name" />
+    <button onclick="joinRoom()">Join</button>
+    <canvas id="qrcode"></canvas>
   </div>
+
   <div id="chat-container" style="display:none;">
-    <div id="messages"></div>
+    <div id="messages" class="card"></div>
     <input type="text" id="message" placeholder="Type a message">
     <button onclick="sendMessage()">Send</button>
     <input type="file" id="fileInput" />
   </div>
+
   <script src="/socket.io/socket.io.js"></script>
+  <script src="qrcode.min.js"></script>
   <script src="notify.js"></script>
   <script src="app.js"></script>
 </body>

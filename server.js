@@ -1,14 +1,14 @@
 const express = require('express');
 const http = require('http');
 const path = require('path');
-const socketIo = require('socket.io');
 const multer = require('multer');
+const socketIo = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
-
 const upload = multer({ dest: 'uploads/' });
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, 'public')));
 
