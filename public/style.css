@@ -1,1 +1,29 @@
-Bs0QyzUjLrCfcFV3Gmokqr99tjoOXX4NoSy1GWHCNoqYmXzTpGCoheddO43m8jsvJnjCf0cxHnfyJ1sKsLrtqKHW9mvhbPa432aVhOaNgYj9NhpgxDN6Ai0mxE1WqoxujBezCm0qNMnnxCoxbwkR24ojDVJDeYmuWsxpCKPaB0GaPkFKWnVKRioiCdGYfcU9Rb9nKz48oyZ3iEBFuYm9IRrJmNcen7EOGKgXxqr78xxVqUWjcElQslRDemvAYTMVT3b9B9ENjvxpE5mDvb4PLmlPd5IdqOMdQncJchmwcoljmid3UvwSvY3iB942bujGDnYvAY9Nci8etYFLeW0JltCbcufzQalNdGd9KaP8YhrddgbfYYC5BACi7liicS8TXSvOXfwlmqKQTSs3I6TNo9gt0WoxAgTwJ2U9HpP6Y6yaALZbsZiDgM7WkKisSrHyLfHoPjJqFijgYXjmHSaCn07J0BiBheDYQb1XmQ2V1LfE4WpQtMPeO08wTRQVwiTZ6sNNUTqBNVbTsmos6OinWqtPiYcG9Se6N4V4gq6s6LL9GfWnrxrbssSWgOqeRdKYlBzpvgTo7iB2s2hZye2wzlmSX7X8o4GMHZqw7ZBDTOpdGEWKvqOzKr9FsPR6KFGx1MPq06VIpgOdNfaSndgyLBYOPoRx4RQwyX26NjiR7MCjymVqdb3D42meAWSv5j23Cwld5kilV22q2PAMMVs2jw8VVqrIC1PsirqIA9WJpso2agZZl1Imi3RbXjz4UahUV4BQNZpeXUIYspDZMgo84PqEuC93FOEkjjhMUMx3zm2FUD7OcOT96eQG8HMe4fiKcVQ4B5G10D11e0Od7M4myC2k1yxnPXLOuxbdWjmEo6mSTqqz9JswcHR3T0QFtBFemYYw32KyXEsc4atDR5sbK8RbsCkgOCia0dtpf4gzdEjISuWG7j7RJoHY5rJ52kjdPTMytMccajwcvO8vL2nxE0jyzcAAVgptFzHrwkrT
+
+body {
+  font-family: 'Helvetica Neue', sans-serif;
+  background: #f8f8f8;
+  margin: 0;
+  padding: 20px;
+}
+.app {
+  max-width: 500px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+input, button {
+  padding: 10px;
+  margin: 5px 0;
+  width: 100%;
+  font-size: 16px;
+}
+#messages {
+  height: 200px;
+  overflow-y: scroll;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.hidden { display: none; }
