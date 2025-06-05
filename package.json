@@ -1,7 +1,7 @@
 
 {
-  "name": "shadh-messenger-phase5",
-  "version": "5.0.1",
+  "name": "shadh-messenger-phase7",
+  "version": "7.0.0",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
