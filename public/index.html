@@ -2,21 +2,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Chat</title>
+  <title>Shadh Messenger Phase 11</title>
   <style>
-    body { font-family: sans-serif; background: #121212; color: white; margin: 0; padding: 0; }
-    #messages { height: 70vh; overflow-y: scroll; padding: 1rem; border-bottom: 1px solid #333; }
-    input, button { padding: 0.5rem; margin: 0.5rem; }
+    body.light { background: #ffffff; color: black; }
+    body.dark { background: #121212; color: white; }
+    #messages { height: 60vh; overflow-y: scroll; border: 1px solid #333; margin-bottom: 1rem; }
   </style>
 </head>
-<body>
-  <h2>Shadh Messenger Chat</h2>
+<body class="dark">
+  <button onclick="toggleTheme()">🌗 Toggle Theme</button>
   <form id="uploadForm" enctype="multipart/form-data">
     <input type="file" name="file" />
-    <button type="submit">Upload Media</button>
+    <button type="submit">📎 Upload</button>
+  </form>
+  <form id="profileForm" enctype="multipart/form-data">
+    <input type="file" name="profile" />
+    <button type="submit">👤 Profile Pic</button>
   </form>
   <div id="messages"></div>
-  <input id="msg" autocomplete="off" placeholder="Type a message..." />
+  <input id="msg" autocomplete="off" placeholder="Type message..." />
   <button onclick="send()">Send</button>
   <script src="/socket.io/socket.io.js"></script>
   <script>
@@ -39,6 +43,17 @@
       const data = await res.json();
       socket.emit('message', '📎 ' + data.file);
     };
+    document.getElementById('profileForm').onsubmit = async e => {
+      e.preventDefault();
+      const form = new FormData(e.target);
+      const res = await fetch('/profile', { method: 'POST', body: form });
+      const data = await res.json();
+      alert("👤 Profile uploaded: " + data.file);
+    };
+    function toggleTheme() {
+      const body = document.body;
+      body.className = body.className === 'dark' ? 'light' : 'dark';
+    }
   </script>
 </body>
 </html>

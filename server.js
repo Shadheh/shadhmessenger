@@ -3,49 +3,42 @@ const express = require('express');
 const multer = require('multer');
 const http = require('http');
 const path = require('path');
-const qr = require('qrcode');
 const { Server } = require('socket.io');
-const bodyParser = require('body-parser');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
 
-const users = {}; // simple in-memory user store
-
-// Multer storage for uploads
-const storage = multer.diskStorage({
+// Upload setup
+const mediaStorage = multer.diskStorage({
   destination: './public/uploads/',
   filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
 });
-const upload = multer({ storage });
-
-// Login
-app.get('/login', (req, res) => res.sendFile(__dirname + '/views/login.html'));
-app.post('/login', (req, res) => {
-  users[req.body.username] = req.body.password;
-  return res.redirect('/');
+const profileStorage = multer.diskStorage({
+  destination: './public/profile/',
+  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
 });
+const upload = multer({ storage: mediaStorage });
+const profileUpload = multer({ storage: profileStorage });
 
-// QR code endpoint
-app.get('/qr/:text', async (req, res) => {
-  const code = await qr.toDataURL(req.params.text);
-  res.send(`<img src="${code}"/>`);
-});
-
-// Upload
+// Upload routes
 app.post('/upload', upload.single('file'), (req, res) => {
   res.send({ file: '/uploads/' + req.file.filename });
 });
+app.post('/profile', profileUpload.single('profile'), (req, res) => {
+  res.send({ file: '/profile/' + req.file.filename });
+});
 
+// Simple homepage
 app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
 
+// Group chat
 io.on('connection', socket => {
-  socket.on('message', data => io.emit('message', data));
+  socket.on('message', msg => io.emit('message', msg));
 });
 
 const port = process.env.PORT || 10000;
-server.listen(port, () => console.log('Server running on port ' + port));
+server.listen(port, () => console.log('🚀 Server ready on port ' + port));
