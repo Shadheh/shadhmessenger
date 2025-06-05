@@ -1,3 +1,3 @@
-# Shadh Messenger - Phase 3
+# Shadh Messenger Phase 13
 
-Full login system, profile photo, Apple UI, WhatsApp layout.
+Includes chat, media, QR, login, push notifications, themes.
