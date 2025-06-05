@@ -1,2 +1,1 @@
-Shadh Messenger Phase 4: Premium Chat App
-Includes push notifications, themes, media sharing, and more.
+Shadh Messenger Phase 9: Premium chat app with Cloudinary, QR, and mobile-optimized UI.
