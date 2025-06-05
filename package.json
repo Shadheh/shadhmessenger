@@ -1,13 +1,1 @@
-{
-  "name": "shadh-messenger-no-login",
-  "version": "1.0.0",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2",
-    "ejs": "^3.1.9",
-    "socket.io": "^4.7.2"
-  }
-}
+{ "name": "shadh-messenger", "version": "4.0.0", "dependencies": { "express": "^4.18.2" } }
